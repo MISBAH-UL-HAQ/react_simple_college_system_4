@@ -1,23 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Header from "./components/Header";
+import DepartmentList from "./components/Deaprtment/DepartmentList";
+import AddDepartment from "./components/Deaprtment/AddDepartment";
+import StudentList from "./components/Student/StudentList";
+import AddStudent from "./components/Student/AddStudent";
+import "./style.css";
 
 function App() {
+  // Flag to refresh the student list when changes occur.
+  const [studentRefresh, setStudentRefresh] = useState(false);
+  // Hold a student for editing.
+  const [selectedStudent, setSelectedStudent] = useState(null);
+
+  // Toggle the student refresh flag after save.
+  const handleStudentSaved = () => {
+    setStudentRefresh(!studentRefresh);
+  };
+
+  // Set a student to be edited.
+  const handleEditStudent = (student) => {
+    setSelectedStudent(student);
+  };
+
+  // Clear the selected student after editing.
+  const clearSelectedStudent = () => {
+    setSelectedStudent(null);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="main-container">
+      <Header />
+      <h2>Departments</h2>
+      <AddDepartment onDepartmentAdded={() => {}} />
+      <DepartmentList />
+
+      <h2>Students</h2>
+      <AddStudent
+        onStudentSaved={handleStudentSaved}
+        selectedStudent={selectedStudent}
+        clearSelectedStudent={clearSelectedStudent}
+      />
+      <StudentList onEditStudent={handleEditStudent} key={studentRefresh} />
     </div>
   );
 }
