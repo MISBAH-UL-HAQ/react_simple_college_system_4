@@ -1,6 +1,36 @@
 
 const API_BASE_URL = "https://localhost:7220/api";
 
+
+// Registration API call
+export function registerUser(userData) {
+  return fetch(`${API_BASE_URL}/auth/register`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(userData)
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Failed to register user.");
+      }
+      return response.json();
+    });
+}
+
+// Login API call
+export function loginUser(credentials) {
+  return fetch(`${API_BASE_URL}/auth/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(credentials)
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Failed to log in. Please check your credentials.");
+      }
+      return response.json();
+    });
+}
 // Fetch all departments
 export function getDepartments() {
   return fetch(`${API_BASE_URL}/departments`)
@@ -56,8 +86,24 @@ export function deleteDepartment(id) {
 }
 
 // Fetch all students
+// export function getStudents() {
+//   return fetch(`${API_BASE_URL}/students`)
+//     .then(response => {
+//       if (!response.ok) {
+//         throw new Error("Failed to fetch students.");
+//       }
+//       return response.json();
+//     });
+// }
 export function getStudents() {
-  return fetch(`${API_BASE_URL}/students`)
+  // Retrieve the token from localStorage
+  const token = localStorage.getItem("token");
+  return fetch(`${API_BASE_URL}/students`, {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": token ? `Bearer ${token}` : ""
+    }
+  })
     .then(response => {
       if (!response.ok) {
         throw new Error("Failed to fetch students.");
@@ -65,12 +111,12 @@ export function getStudents() {
       return response.json();
     });
 }
-
 // Add a new student
 export function addStudent(student) {
+  const token = localStorage.getItem("token");
   return fetch(`${API_BASE_URL}/students`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json","Authorization": token ? `Bearer ${token}` : "" },
     body: JSON.stringify(student),
   })
     .then(response => {
@@ -84,9 +130,10 @@ export function addStudent(student) {
 
 // Update an existing student
 export function updateStudent(student) {
+  const token = localStorage.getItem("token");
     return fetch(`${API_BASE_URL}/students/${student.id}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json","Authorization": token ? `Bearer ${token}` : "" },
       body: JSON.stringify(student),
     })
       .then(response => {
@@ -107,8 +154,11 @@ export function updateStudent(student) {
 
 // Delete a student
 export function deleteStudent(id) {
+  const token = localStorage.getItem("token");
   return fetch(`${API_BASE_URL}/students/${id}`, {
     method: "DELETE",
+    headers: { "Content-Type": "application/json","Authorization": token ? `Bearer ${token}` : "" },
+    body: JSON.stringify(id),
   })
     .then(response => {
       if (!response.ok) {
