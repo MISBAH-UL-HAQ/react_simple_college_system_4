@@ -10,7 +10,7 @@ function Login({ onLoginSuccess }) {
     e.preventDefault();
     try {
       const response = await loginUser({ email, password });
-      // response is expected to be: { token: "eyJhbGci..." }
+      // response is expected to be: { token: " " }
       const token = response.token;
       if (token) {
         // Store the token (for example, in localStorage; you could also use a React Context)

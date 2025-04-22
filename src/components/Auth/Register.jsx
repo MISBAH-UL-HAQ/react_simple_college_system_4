@@ -15,7 +15,7 @@ function Register() {
       const payload = { fullName, email, password, departmentId: parseInt(departmentId) };
       const response = await registerUser(payload);
       setMessage(response);  // response contains a success message from the API
-      // Optionally clear the form or redirect to login page
+      //  clear the form or redirect to login page
     } catch (error) {
       console.error("Registration error:", error);
       setMessage(error.message);
